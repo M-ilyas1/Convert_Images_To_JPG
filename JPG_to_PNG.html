@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Converter</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap" rel="stylesheet">
+</head>
+
+<style>
+.bg-light {
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+#downloadLink {
+  margin-top: 10px;
+}
+
+</style>
+<body>
+  <nav class="p-3">
+    <a class="navbar-brand" href="#"><h2 class="text-center">Convert images to JPG</h2></a>
+  </nav>
+
+  <section class="d-flex justify-content-center">
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+      <a class="btn btn-primary p-3 font-5" href="#" role="button">JPG to PNG</a>
+      <a class="btn btn-primary p-3 font-5" href="./JPG_to_GIF.html" role="button">JPG to GIF</a>
+      <a class="btn btn-primary p-3 font-5" href="./JPG_to_TIFF.html" role="button">JPG to TIFF</a>
+      <a class="btn btn-primary p-3 font-5" href="./JPG_to_PSD.html" role="button">JPG to PSD</a>
+      <a class="btn btn-primary p-3 font-5" href="./JPG_to_WEBP.html" role="button">JPG to WEBP</a>
+      <a class="btn btn-primary p-3 font-5" href="./JPG_to_HEIC.html" role="button">JPG to HEIC</a>
+    </div>
+  </section>
+
+  <section id="main-tool">
+    <div class="bg-light p-3">
+      <h1>PNG to JPG</h1>
+      <input type="file" id="fileInput" accept="image/png">
+      <button onclick="convertToJpg()" class="btn btn-danger">PNG to JPG</button>
+      <br>
+      <canvas id="canvas" style="display: none;"></canvas>
+      <a id="downloadLink" style="display: none;" download="converted.jpg" class="btn btn-primary">Download converted JPG</a>
+    </div>
+  </section>
+  
+    
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <script>
+    // Function to convert PNG to JPG
+    function convertToJpg() {
+    const fileInput = document.getElementById('fileInput');
+    const canvas = document.getElementById('canvas');
+    const downloadLink = document.getElementById('downloadLink');
+
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            canvas.toBlob(function (blob) {
+            const url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            downloadLink.style.display = 'block';
+            }, 'image/jpeg', 1.0);
+        };
+        img.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+    }
+
+  </script>
+</body>
+</html>
